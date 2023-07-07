@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Variables
+VM1_DOMAIN="vm1.example.com"
+VM2_DOMAIN="vm2.example.com"
+
+# Configure load balancing between virtual machines
+configure_load_balancing() {
+    # Configure Nginx for Virtual Machine 1
+    cat << EOF > /usr/local/nginx/conf/vm1.conf
+server {
+    listen 80;
+    server_name $VM1_DOMAIN;
+
+    location / {
+        root /var/www/vm1;
+        index index.html;
+    }
+}
+EOF
+
+    # Configure Nginx for Virtual Machine 2
+    cat << EOF > /usr/local/nginx/conf/vm2.conf
+server {
+    listen 80;
+    server_name $VM2_DOMAIN;
+
+    location / {
+        root /var/www/vm2;
+        index index.html;
+    }
+}
+EOF
+}
+
+configure_load_balancing
