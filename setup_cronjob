@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Variables
+BACKUP_DIR="/home/$(whoami)/nginx_backups"
+CRON_JOB="0 0 * * * cp -r /usr/local/nginx $BACKUP_DIR/nginx_backup_$(date +\%Y\%m\%d)"
+
+# Error handling function
+handle_error() {
+    echo "Error: $1"
+    exit 1
+}
+
+# Setup cron job for Nginx backup
+setup_cron_job() {
+    crontab -l | { cat; echo "$CRON_JOB"; } | crontab - || handle_error "Failed to setup cron job."
+}
+
+setup_cron_job
